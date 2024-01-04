@@ -159,16 +159,12 @@ export function getHeaders() {
   const isOneApi = accessStore.provider === ServiceProvider.OneAPI;
   const authHeader = isAzure ? "api-key" : "Authorization";
   // const apiKey = isGoogle
-  //   ? accessStore.googleApiKey
-  //   : isAzure
-  //   ? accessStore.azureApiKey
-  //   : isOpenAI
-  //   ? accessStore.openaiApiKey
-  //   : isOneApi
-  //   ? accessStore.oneApiKey
-  //   : "";
+  //     ? accessStore.googleApiKey
+  //     : isAzure
+  //     ? accessStore.azureApiKey
+  //     : accessStore.openaiApiKey;
 
-  var apiKey: String;
+  var apiKey: string;
   if (isOneApi) {
       if (accessStore.googleApiKey.length !== 0) {
         apiKey = accessStore.googleApiKey
