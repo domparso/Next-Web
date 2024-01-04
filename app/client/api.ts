@@ -155,7 +155,6 @@ export function getHeaders() {
   const modelConfig = useChatStore.getState().currentSession().mask.modelConfig;
   const isGoogle = modelConfig.model === "gemini-pro";
   const isAzure = accessStore.provider === ServiceProvider.Azure;
-  const isOpenAI = accessStore.provider === ServiceProvider.OpenAI;
   const isOneApi = accessStore.provider === ServiceProvider.OneAPI;
   const authHeader = isAzure ? "api-key" : "Authorization";
   // const apiKey = isGoogle

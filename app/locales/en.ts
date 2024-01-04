@@ -337,7 +337,7 @@ const en: LocaleType = {
           SubTitle: "Select a specific part version",
         },
       },
-      OpenAI: {
+      OneAPI: {
         ApiKey: {
           Title: "OneAPI API Key",
           SubTitle: "User custom OneAPI Api Key",
