@@ -180,7 +180,7 @@ export function getHeaders() {
   } else if (isAzure) {
     apiKey = accessStore.azureApiKey;
   } else {
-    accessStore.openaiApiKey;
+    apiKey = accessStore.openaiApiKey;
   }
 
   const makeBearer = (s: string) => `${isAzure ? "" : "Bearer "}${s.trim()}`;
