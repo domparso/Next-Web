@@ -18,6 +18,7 @@ import { prettyObject } from "../utils/format";
 import { estimateTokenLength } from "../utils/token";
 import { nanoid } from "nanoid";
 import { createPersistStore } from "../utils/store";
+import {useAccessStore} from "@/app/store/access";
 
 export type ChatMessage = RequestMessage & {
   date: string;
@@ -302,11 +303,21 @@ export const useChatStore = createPersistStore(
           ]);
         });
 
+        // 区分 one api与其他的优先级
+        const accessStore = useAccessStore.getState();
         var api: ClientApi;
         if (modelConfig.model === "gemini-pro") {
-          api = new ClientApi(ModelProvider.GeminiPro);
+          if (accessStore.googleApiKey.length === 0) {
+            api = new ClientApi(ModelProvider.OneApi);
+          } else {
+            api = new ClientApi(ModelProvider.GeminiPro);
+          }
         } else {
-          api = new ClientApi(ModelProvider.GPT);
+          if (accessStore.openaiApiKey.length !== 0 || accessStore.azureApiKey.length !== 0) {
+            api = new ClientApi(ModelProvider.GPT);
+          } else {
+            api = new ClientApi(ModelProvider.OneApi);
+          }
         }
 
         // make request
@@ -487,11 +498,21 @@ export const useChatStore = createPersistStore(
         const session = get().currentSession();
         const modelConfig = session.mask.modelConfig;
 
+        // 区分 one api与其他的优先级
+        const accessStore = useAccessStore.getState();
         var api: ClientApi;
         if (modelConfig.model === "gemini-pro") {
-          api = new ClientApi(ModelProvider.GeminiPro);
+          if (accessStore.googleApiKey.length === 0) {
+            api = new ClientApi(ModelProvider.OneApi);
+          } else {
+            api = new ClientApi(ModelProvider.GeminiPro);
+          }
         } else {
-          api = new ClientApi(ModelProvider.GPT);
+          if (accessStore.openaiApiKey.length !== 0 || accessStore.azureApiKey.length !== 0) {
+            api = new ClientApi(ModelProvider.GPT);
+          } else {
+            api = new ClientApi(ModelProvider.OneApi);
+          }
         }
 
         // remove error messages if any

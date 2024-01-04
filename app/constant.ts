@@ -74,6 +74,7 @@ export enum ServiceProvider {
 export enum ModelProvider {
   GPT = "GPT",
   GeminiPro = "GeminiPro",
+  OneApi = "ONEAPI",
 
 }
 

@@ -8,6 +8,7 @@ import {
 import { ChatMessage, ModelType, useAccessStore, useChatStore } from "../store";
 import { ChatGPTApi } from "./platforms/openai";
 import { GeminiProApi } from "./platforms/google";
+import { OneApi } from "./platforms/oneapi";
 export const ROLES = ["system", "user", "assistant"] as const;
 export type MessageRole = (typeof ROLES)[number];
 
@@ -86,7 +87,12 @@ export class ClientApi {
   public llm: LLMApi;
 
   constructor(provider: ModelProvider = ModelProvider.GPT) {
-    if (provider === ModelProvider.GeminiPro) {
+    const accessStore = useAccessStore.getState();
+    if (provider === ModelProvider.OneApi) {
+      this.llm = new OneApi();
+      accessStore.provider = ServiceProvider.OneAPI;
+      return;
+    } else if (provider === ModelProvider.GeminiPro) {
       this.llm = new GeminiProApi();
       return;
     }
@@ -149,12 +155,37 @@ export function getHeaders() {
   const modelConfig = useChatStore.getState().currentSession().mask.modelConfig;
   const isGoogle = modelConfig.model === "gemini-pro";
   const isAzure = accessStore.provider === ServiceProvider.Azure;
+  const isOpenAI = accessStore.provider === ServiceProvider.OpenAI;
+  const isOneApi = accessStore.provider === ServiceProvider.OneAPI;
   const authHeader = isAzure ? "api-key" : "Authorization";
-  const apiKey = isGoogle
-    ? accessStore.googleApiKey
-    : isAzure
-    ? accessStore.azureApiKey
-    : accessStore.openaiApiKey;
+  // const apiKey = isGoogle
+  //   ? accessStore.googleApiKey
+  //   : isAzure
+  //   ? accessStore.azureApiKey
+  //   : isOpenAI
+  //   ? accessStore.openaiApiKey
+  //   : isOneApi
+  //   ? accessStore.oneApiKey
+  //   : "";
+
+  var apiKey: String;
+  if (isOneApi) {
+      if (accessStore.googleApiKey.length !== 0) {
+        apiKey = accessStore.googleApiKey
+      } else if (accessStore.azureApiKey.length !== 0) {
+        apiKey = accessStore.azureApiKey
+      } else if (accessStore.openaiApiKey.length !== 0) {
+        apiKey = accessStore.openaiApiKey
+      } else {
+        apiKey = accessStore.oneApiKey
+      }
+  } else if (isGoogle) {
+    apiKey = accessStore.googleApiKey
+  } else if (isAzure) {
+    apiKey = accessStore.azureApiKey
+  } else {
+    accessStore.openaiApiKey
+  }
 
   const makeBearer = (s: string) => `${isAzure ? "" : "Bearer "}${s.trim()}`;
   const validString = (x: string) => x && x.length > 0;

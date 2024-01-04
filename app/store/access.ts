@@ -70,6 +70,10 @@ export const useAccessStore = createPersistStore(
       return ensure(get(), ["googleApiKey"]);
     },
 
+    isValidOneApi() {
+      return ensure(get(), ["oneApiKey"]);
+    },
+
     isAuthorized() {
       this.fetch();
 
@@ -78,6 +82,7 @@ export const useAccessStore = createPersistStore(
         this.isValidOpenAI() ||
         this.isValidAzure() ||
         this.isValidGoogle() ||
+        this.isValidOneApi() ||
         !this.enabledAccessControl() ||
         (this.enabledAccessControl() && ensure(get(), ["accessCode"]))
       );

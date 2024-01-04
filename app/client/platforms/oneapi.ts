@@ -27,25 +27,26 @@ export interface OpenAIListModelResponse {
     }>;
 }
 
-export class ChatGPTApi implements LLMApi {
+export class OneApi implements LLMApi {
     private disableListModels = true;
 
     path(path: string): string {
         const accessStore = useAccessStore.getState();
 
-        const isAzure = accessStore.provider === ServiceProvider.Azure;
+        const isOneApi = accessStore.provider === ServiceProvider.OneAPI;
 
-        if (isAzure && !accessStore.isValidAzure()) {
+        if (isOneApi && !accessStore.isValidOneApi()) {
             throw Error(
-                "incomplete azure config, please check it in your settings page",
+                "incomplete OneAPI config, please check it in your settings page",
             );
         }
 
-        let baseUrl = isAzure ? accessStore.azureUrl : accessStore.openaiUrl;
+        let baseUrl = accessStore.oneUrl;
 
         if (baseUrl.length === 0) {
-            const isApp = !!getClientConfig()?.isApp;
-            baseUrl = isApp ? DEFAULT_API_HOST : ApiPath.OpenAI;
+            throw Error(
+                "incomplete OneAPI config, please check it in your settings page",
+            );
         }
 
         if (baseUrl.endsWith("/")) {
@@ -53,10 +54,6 @@ export class ChatGPTApi implements LLMApi {
         }
         if (!baseUrl.startsWith("http") && !baseUrl.startsWith(ApiPath.OpenAI)) {
             baseUrl = "https://" + baseUrl;
-        }
-
-        if (isAzure) {
-            path = makeAzurePath(path, accessStore.azureApiVersion);
         }
 
         return [baseUrl, path].join("/");
@@ -92,7 +89,7 @@ export class ChatGPTApi implements LLMApi {
             // Please do not ask me why not send max_tokens, no reason, this param is just shit, I dont want to explain anymore.
         };
 
-        console.log("[Request] openai payload: ", requestPayload);
+        console.log("[Request] One API payload: ", requestPayload);
 
         const shouldStream = !!options.config.stream;
         const controller = new AbortController();
@@ -155,7 +152,7 @@ export class ChatGPTApi implements LLMApi {
                         clearTimeout(requestTimeoutId);
                         const contentType = res.headers.get("content-type");
                         console.log(
-                            "[OpenAI] request response content type: ",
+                            "[One API] request response content type: ",
                             contentType,
                         );
 
@@ -267,7 +264,7 @@ export class ChatGPTApi implements LLMApi {
         }
 
         if (!used.ok || !subs.ok) {
-            throw new Error("Failed to query usage from openai");
+            throw new Error("Failed to query usage from OneAPI");
         }
 
         const response = (await used.json()) as {
