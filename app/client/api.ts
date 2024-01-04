@@ -167,20 +167,20 @@ export function getHeaders() {
   var apiKey: string;
   if (isOneApi) {
       if (accessStore.googleApiKey.length !== 0) {
-        apiKey = accessStore.googleApiKey
+        apiKey = accessStore.googleApiKey;
       } else if (accessStore.azureApiKey.length !== 0) {
-        apiKey = accessStore.azureApiKey
+        apiKey = accessStore.azureApiKey;
       } else if (accessStore.openaiApiKey.length !== 0) {
-        apiKey = accessStore.openaiApiKey
+        apiKey = accessStore.openaiApiKey;
       } else {
-        apiKey = accessStore.oneApiKey
+        apiKey = accessStore.oneApiKey;
       }
   } else if (isGoogle) {
-    apiKey = accessStore.googleApiKey
+    apiKey = accessStore.googleApiKey;
   } else if (isAzure) {
-    apiKey = accessStore.azureApiKey
+    apiKey = accessStore.azureApiKey;
   } else {
-    accessStore.openaiApiKey
+    accessStore.openaiApiKey;
   }
 
   const makeBearer = (s: string) => `${isAzure ? "" : "Bearer "}${s.trim()}`;
