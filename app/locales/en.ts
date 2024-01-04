@@ -337,6 +337,18 @@ const en: LocaleType = {
           SubTitle: "Select a specific part version",
         },
       },
+      OpenAI: {
+        ApiKey: {
+          Title: "OneAPI API Key",
+          SubTitle: "User custom OneAPI Api Key",
+          Placeholder: "sk-xxx",
+        },
+
+        Endpoint: {
+          Title: "OpenAI Endpoint",
+          SubTitle: "Must starts with http(s):// or use /api/ as default",
+        },
+      },
     },
 
     Model: "Model",

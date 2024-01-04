@@ -68,11 +68,13 @@ export enum ServiceProvider {
   OpenAI = "OpenAI",
   Azure = "Azure",
   Google = "Google",
+  OneAPI = "OneAPI",
 }
 
 export enum ModelProvider {
   GPT = "GPT",
   GeminiPro = "GeminiPro",
+
 }
 
 export const OpenaiPath = {
@@ -91,6 +93,10 @@ export const Google = {
   ChatPath: "v1beta/models/gemini-pro:generateContent",
 
   // /api/openai/v1/chat/completions
+};
+
+export const OneAPI = {
+  ExampleEndpoint: "https://{resource-url}",
 };
 
 export const DEFAULT_INPUT_TEMPLATE = `{{input}}`; // input / time / model / lang

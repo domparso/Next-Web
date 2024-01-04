@@ -53,6 +53,7 @@ import Link from "next/link";
 import {
   Azure,
   Google,
+  OneAPI,
   OPENAI_BASE_URL,
   Path,
   RELEASE_URL,
@@ -1081,8 +1082,8 @@ export function Settings() {
                         ></input>
                       </ListItem>
                       <ListItem
-                        title={Locale.Settings.Access.Azure.ApiKey.Title}
-                        subTitle={Locale.Settings.Access.Azure.ApiKey.SubTitle}
+                        title={Locale.Settings.Access.Google.ApiKey.Title}
+                        subTitle={Locale.Settings.Access.Google.ApiKey.SubTitle}
                       >
                         <PasswordInput
                           value={accessStore.googleApiKey}
@@ -1118,6 +1119,45 @@ export function Settings() {
                         ></input>
                       </ListItem>
                     </>
+                  )  : accessStore.provider === "OneAPI" ? (
+                      <>
+                        <ListItem
+                            title={Locale.Settings.Access.OneAPI.Endpoint.Title}
+                            subTitle={
+                              Locale.Settings.Access.OneAPI.Endpoint.SubTitle
+                            }
+                        >
+                          <input
+                              type="text"
+                              value={accessStore.oneUrl}
+                              placeholder={OneAPI.ExampleEndpoint}
+                              onChange={(e) =>
+                                  accessStore.update(
+                                      (access) =>
+                                          (access.oneUrl = e.currentTarget.value),
+                                  )
+                              }
+                          ></input>
+                        </ListItem>
+                        <ListItem
+                            title={Locale.Settings.Access.OneAPI.ApiKey.Title}
+                            subTitle={Locale.Settings.Access.OneAPI.ApiKey.SubTitle}
+                        >
+                          <PasswordInput
+                              value={accessStore.oneApiKey}
+                              type="text"
+                              placeholder={
+                                Locale.Settings.Access.OneAPI.ApiKey.Placeholder
+                              }
+                              onChange={(e) => {
+                                accessStore.update(
+                                    (access) =>
+                                        (access.oneApiKey = e.currentTarget.value),
+                                );
+                              }}
+                          />
+                        </ListItem>
+                      </>
                   ) : null}
                 </>
               )}

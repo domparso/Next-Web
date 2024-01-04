@@ -329,6 +329,18 @@ const cn = {
           SubTitle: "选择指定的部分版本",
         },
       },
+      OneAPI: {
+        ApiKey: {
+          Title: "OneAPI API Key",
+          SubTitle: "使用自定义 OneAPI Key 绕过密码访问限制",
+          Placeholder: "OneAPI API Key",
+        },
+
+        Endpoint: {
+          Title: "接口地址",
+          SubTitle: "除默认地址外，必须包含 http(s)://",
+        },
+      },
       CustomModel: {
         Title: "自定义模型名",
         SubTitle: "增加自定义模型可选项，使用英文逗号隔开",

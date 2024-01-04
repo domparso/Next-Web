@@ -34,6 +34,11 @@ const DEFAULT_ACCESS_STATE = {
   googleApiKey: "",
   googleApiVersion: "v1",
 
+  // one api
+  oneUrl: "",
+  oneApiKey: "",
+  oneApiVersion: "v1",
+
   // server config
   needCode: true,
   hideUserApiKey: false,
