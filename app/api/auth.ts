@@ -2,6 +2,7 @@ import { NextRequest } from "next/server";
 import { getServerSideConfig } from "../config/server";
 import md5 from "spark-md5";
 import { ACCESS_CODE_PREFIX, ModelProvider } from "../constant";
+import { ClientApi } from "@/app/client/api";
 
 function getIP(req: NextRequest) {
   let ip = req.ip ?? req.headers.get("x-real-ip");
@@ -57,12 +58,29 @@ export function auth(req: NextRequest, modelProvider: ModelProvider) {
   if (!apiKey) {
     const serverConfig = getServerSideConfig();
 
-    const systemApiKey =
-      modelProvider === ModelProvider.GeminiPro
-        ? serverConfig.googleApiKey
-        : serverConfig.isAzure
-        ? serverConfig.azureApiKey
-        : serverConfig.apiKey;
+    let systemApiKey = "";
+    if (modelProvider === ModelProvider.GeminiPro) {
+      if (serverConfig.googleApiKey.length !== 0) {
+        systemApiKey = serverConfig.googleApiKey;
+      } else {
+        systemApiKey = serverConfig.oneApiKey;
+      }
+    } else {
+      if (serverConfig.azureApiKey.length !== 0) {
+        systemApiKey = serverConfig.azureApiKey;
+      } else if (serverConfig.apiKey.length !== 0) {
+        systemApiKey = serverConfig.apiKey;
+      } else {
+        systemApiKey = serverConfig.oneApiKey;
+      }
+    }
+
+    // const systemApiKey =
+    //   modelProvider === ModelProvider.GeminiPro
+    //     ? serverConfig.googleApiKey
+    //     : serverConfig.isAzure
+    //     ? serverConfig.azureApiKey
+    //     : serverConfig.apiKey;
     if (systemApiKey) {
       console.log("[Auth] use system api key");
       req.headers.set("Authorization", `Bearer ${systemApiKey}`);
